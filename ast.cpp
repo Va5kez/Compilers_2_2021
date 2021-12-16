@@ -105,7 +105,9 @@ void DivExpr::genCode(Code &code){
 }
 
 void IdExpr::genCode(Code &code){
-
+    string floatTemporal = getFloatTemp();
+    code.place = floatTemporal;
+    code.code = "l.s " + floatTemporal + ", " + this->id + "\n";
 }
 
 string ExprStatement::genCode(){
@@ -196,7 +198,13 @@ string PrintStatement::genCode(){
 }
 
 string ReturnStatement::genCode(){
-    return "Return statement code generation\n";
+    Code expr1;
+    stringstream ss;
+    this->expr->genCode(expr1);
+    releaseFloatTemp(expr1.place);
+    ss << expr1.code << endl;
+    ss << "mfc1 $v0, " << expr1.place << endl;
+    return ss.str();
 }
 
 string MethodDefinitionStatement::genCode(){
