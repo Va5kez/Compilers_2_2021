@@ -80,6 +80,7 @@ void FloatExpr::genCode(Code &code){
 
 void SubExpr::genCode(Code &code){
     Code left, right;
+    code.place = getFloatTemp();
     stringstream ss;
     this->expr1->genCode(left);
     this->expr2->genCode(right);
@@ -87,11 +88,12 @@ void SubExpr::genCode(Code &code){
     << "sub.s " << code.place << ", " << left.place << ", " << right.place << endl;
     releaseFloatTemp(left.place);
     releaseFloatTemp(right.place);
-    code.code = ss.str(); 
+    code.code = ss.str();
 }
 
 void DivExpr::genCode(Code &code){
     Code left, right;
+    code.place = getFloatTemp();
     stringstream ss;
     this->expr1->genCode(left);
     this->expr2->genCode(right);
